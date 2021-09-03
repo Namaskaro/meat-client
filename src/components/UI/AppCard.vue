@@ -9,30 +9,32 @@
       <p>{{ price }}</p>
     </div>
     <div class="px-6 pt-4 pb-2">
-      <AppButton
+      <!-- <AppButton
         title="Купить"
         text="white"
         variant="green"
         rounded="2xl"
         size="md"
+        @click="$emits('add-to-cart')"
       >
         Купить
         <IconCart iconColor="#ffffff" height="5" width="5" class="mt-1 ml-1" />
-      </AppButton>
+      </AppButton> -->
+      <button @click="$emit('add-to-cart')">Купить</button>
     </div>
   </div>
 </template>
 
 <script>
-import AppButton from './AppButton.vue';
-import IconCart from '../icons/IconCart.vue';
+// import AppButton from './AppButton.vue';
+// import IconCart from '../icons/IconCart.vue';
 
 export default {
   name: 'AppCard',
-  components: {
-    AppButton,
-    IconCart,
-  },
+  // components: {
+  //   AppButton,
+  //   IconCart,
+  // },
   props: {
     title: {
       type: String,
@@ -55,5 +57,6 @@ export default {
       required: true,
     },
   },
+  emits: ['add-to-cart'],
 };
 </script>

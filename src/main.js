@@ -7,7 +7,4 @@ import './index.css';
 const app = createApp(App);
 app.use(store);
 app.use(router);
-
-store.dispatch('createUser').then(() => {
-  app.mount('#app');
-});
+app.mount('#app');

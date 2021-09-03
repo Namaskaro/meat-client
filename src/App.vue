@@ -56,7 +56,7 @@ export default {
     ...mapGetters({ theme: 'getTheme' }),
   },
   methods: {
-    ...mapActions(['resetTheme', 'createUser', 'resetUser']),
+    ...mapActions(['resetTheme', 'createUser', 'deleteUser']),
     ...mapMutations(['updateUserAccessKey']),
   },
   watch: {

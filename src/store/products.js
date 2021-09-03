@@ -1,13 +1,11 @@
 import { getProduct, getProducts } from '../services/products.service';
 
 const state = {
-  product: {},
   products: [],
   isLoading: false,
   productError: null,
 };
 const getters = {
-  product: state => id => state.products.find(pr => pr.id === id),
   products: ({ products }) => products,
   productError: ({ productError }) => productError,
   productPrices: ({ products }) => products.map(({ price }) => price),

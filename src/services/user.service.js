@@ -1,7 +1,7 @@
-import { request } from './generic.service';
+import { requestUser } from './generic.service';
 
-const getUser = id => request({ url: `user/${id}`, method: 'get' });
+const getUser = id => requestUser({ url: `user/${id}`, method: 'get' });
 
-const createUser = () => request({ url: 'user', method: 'post' });
+const createUser = () => requestUser({ url: 'user', method: 'post' });
 
 export { createUser, getUser };

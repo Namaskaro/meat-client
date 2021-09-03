@@ -12,6 +12,7 @@
           :title="product.title"
           :description="product.description"
           :image="product.imageUrl"
+          @add-to-cart="addToCart(product._id)"
         />
       </template>
     </FlexWrapper>
@@ -32,7 +33,9 @@ export default {
     FlexWrapper,
   },
   data() {
-    return {};
+    return {
+      // product: null,
+    };
   },
   computed: {
     ...mapGetters(['products']),
@@ -41,6 +44,12 @@ export default {
     ...mapActions({
       fetchProducts: 'fetchProducts',
     }),
+    addToCart(id, quantity) {
+      this.$store.dispatch('addProductToCart', {
+        productId: id,
+        quantity: 1,
+      });
+    },
   },
   async mounted() {
     this.fetchProducts();
