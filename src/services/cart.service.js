@@ -1,6 +1,7 @@
 import { request } from './generic.service';
 
-const addItem = () =>
-  request({ url: 'cart', method: 'post', params: { ...params } });
+const addItem = () => request({ url: 'cart', method: 'post', params: { ...params } });
 
-export { addItem };
+const getCartItems = () => request({ url: 'cart', method: 'get' });
+
+export { addItem, getCartItems };

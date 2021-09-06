@@ -16,9 +16,7 @@
           @click="toggleMode"
         />
         <!-- path -->
-        <div
-          class="toggle-path bg-gray-200 w-16 h-7 rounded-full shadow-inner relative"
-        ></div>
+        <div class="toggle-path bg-gray-200 w-16 h-7 rounded-full shadow-inner relative"></div>
         <!-- crcle -->
         <div
           class="toggle-circle absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 left-0"

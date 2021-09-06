@@ -1,22 +1,23 @@
 <template>
   <div class="relative">
     <AppHeader />
-    <router-view />
-
-    <Notification
-      :notification="notification"
-      :toggleNotification="toggleNotification"
-    />
+    <transition name="fade" mode="out-in">
+      <router-view />
+    </transition>
+    <transition name="fade" mode="out-in">
+      <Notification :notification="notification" :toggleNotification="toggleNotification">
+      </Notification>
+    </transition>
     <AppFooter />
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from 'vuex';
-import AppHeader from './components/UI/AppHeader.vue';
-import AppFooter from './components/UI/AppFooter.vue';
-import Notification from './components/UI/Notification.vue';
-import useNotification from './composable/useNotification';
+import { mapGetters, mapActions } from 'vuex';
+import AppHeader from '@/components/UI/AppHeader.vue';
+import AppFooter from '@/components/UI/AppFooter.vue';
+import Notification from '@/components/UI/Notification.vue';
+import useNotification from '@/composable/useNotification';
 
 export default {
   components: {
@@ -24,21 +25,10 @@ export default {
     AppFooter,
     Notification,
   },
-
   setup() {
-    const {
-      notification,
-      setNotification,
-      toggleNotification,
-    } = useNotification();
-
-    return {
-      notification,
-      toggleNotification,
-      setNotification,
-    };
+    const { notification, setNotification, toggleNotification } = useNotification();
+    return { notification, setNotification, toggleNotification };
   },
-
   beforeMount() {
     this.$store.dispatch('initTheme');
     const existingUser = localStorage.getItem('user');
@@ -46,18 +36,12 @@ export default {
       this.createUser();
     }
   },
-  mounted() {
-    const userAccessKey = localStorage.getItem('user');
-    if (userAccessKey) {
-      this.updateUserAccessKey(userAccessKey);
-    }
-  },
+
   computed: {
     ...mapGetters({ theme: 'getTheme' }),
   },
   methods: {
-    ...mapActions(['resetTheme', 'createUser', 'deleteUser']),
-    ...mapMutations(['updateUserAccessKey']),
+    ...mapActions(['resetTheme', 'cart/createUser', 'cart/deleteUser']),
   },
   watch: {
     theme(newTheme, oldTheme) {
@@ -69,4 +53,13 @@ export default {
 };
 </script>
 
-<style lang="css"></style>
+<style lang="css">
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease-in-out;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

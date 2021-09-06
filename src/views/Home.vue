@@ -1,13 +1,25 @@
 <template>
-  <AppBanner>
+  <!-- <AppBanner>
     <div class="container mx-auto"></div>
-  </AppBanner>
+  </AppBanner> -->
+
   <main>
     <FlexWrapper>
+      <template #loader>
+        <Loader
+          v-if="isLoading"
+          :animation-duration="2000"
+          :size="65"
+          color="red"
+          class="absolute inset-2/4"
+        />
+      </template>
+
       <template #content>
         <AppCard
           v-for="product in products"
-          :key="product.title"
+          :key="product._id"
+          :product="product"
           :price="product.price"
           :title="product.title"
           :description="product.description"
@@ -21,38 +33,44 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import AppBanner from '../components/UI/AppBanner.vue';
-import AppCard from '../components/UI/AppCard.vue';
-import FlexWrapper from '../components/layout/FlexWrapper.vue';
+// import AppBanner from '../components/UI/AppBanner.vue';
+import AppCard from '@/components/UI/AppCard.vue';
+import FlexWrapper from '@/components/layout/FlexWrapper.vue';
+import Loader from '@/components/UI/Loader.vue';
 
 export default {
   name: 'Home',
   components: {
-    AppBanner,
+    // AppBanner,
     AppCard,
     FlexWrapper,
+    Loader,
   },
   data() {
-    return {
-      // product: null,
-    };
+    return {};
   },
   computed: {
-    ...mapGetters(['products']),
+    ...mapGetters({
+      products: 'products/products',
+      isLoading: 'products/isLoading',
+      cartItems: 'cart/cartItems',
+    }),
   },
   methods: {
     ...mapActions({
-      fetchProducts: 'fetchProducts',
+      fetchProducts: 'products/fetchProducts',
+      getCart: 'cart/getCart',
     }),
     addToCart(id, quantity) {
-      this.$store.dispatch('addProductToCart', {
+      this.$store.dispatch('cart/addProductToCart', {
         productId: id,
         quantity: 1,
       });
     },
   },
-  async mounted() {
+  mounted() {
     this.fetchProducts();
+    this.getCart();
   },
 };
 </script>

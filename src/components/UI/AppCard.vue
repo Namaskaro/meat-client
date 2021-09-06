@@ -21,6 +21,8 @@
         <IconCart iconColor="#ffffff" height="5" width="5" class="mt-1 ml-1" />
       </AppButton> -->
       <button @click="$emit('add-to-cart')">Купить</button>
+      <router-link :to="{ name: 'product', params: { id: product._id } }">Read more</router-link>
+      <!-- <button @click="$emit('to-product-details')">Подробнее</button> -->
     </div>
   </div>
 </template>
@@ -56,7 +58,12 @@ export default {
       default: () => '',
       required: true,
     },
+    product: {
+      type: Object,
+      default: () => {},
+    },
   },
-  emits: ['add-to-cart'],
+
+  emits: ['add-to-cart', 'to-product-details'],
 };
 </script>

@@ -25,4 +25,5 @@ export default createStore({
     theme,
     cart,
   },
+  strict: process.env.NODE_ENV !== 'production',
 });
