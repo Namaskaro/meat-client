@@ -15,6 +15,12 @@ let ItemSchema = new Schema(
       type: Number,
       required: true,
     },
+    title: {
+      type: String,
+    },
+    image: {
+      type: String,
+    },
     total: {
       type: Number,
       required: true,

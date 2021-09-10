@@ -18,9 +18,10 @@ exports.createUser = async (req, res) => {
   } catch (error) {}
 };
 
-exports.getUser = async ({ params: { _id } }, res) => {
+exports.getUser = async (req, res) => {
+  const { userAccessKey } = req.body;
   try {
-    const user = await User.findById(_id).populate();
+    const user = await User.findById({ userAccessKey }).populate();
     return res.status(200).send(user);
   } catch (error) {
     console.log(error);

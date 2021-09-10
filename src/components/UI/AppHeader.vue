@@ -33,6 +33,12 @@ export default {
     IconBag,
     AppBadge,
   },
+  props: {
+    cartCount: {
+      type: Number,
+      default: 0,
+    },
+  },
 };
 </script>
 

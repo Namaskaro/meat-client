@@ -6,7 +6,12 @@ exports.cart = async () => {
   });
   return carts[0];
 };
-exports.addItem = async (payload) => {
+exports.addItem = async payload => {
   const newItem = await Cart.create(payload);
   return newItem;
+};
+
+exports.create = async () => {
+  const newCart = await Cart.create();
+  return newCart;
 };

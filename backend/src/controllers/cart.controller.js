@@ -1,12 +1,15 @@
 const cartRepository = require('./cart.repository');
 const productRepository = require('./product.repository');
+const Cart = require('../model/Cart');
+const jwt = require('jsonwebtoken');
 
 exports.addItemToCart = async (req, res) => {
-  const { productId, userAccessKey } = req.body;
+  const { productId } = req.body;
   const quantity = Number.parseInt(req.body.quantity);
   try {
     let cart = await cartRepository.cart();
     let productDetails = await productRepository.productById(productId);
+    console.log(productDetails);
     if (!productDetails) {
       return res.status(500).json({
         type: 'Not Found',
@@ -17,7 +20,7 @@ exports.addItemToCart = async (req, res) => {
     if (cart) {
       //---- check if index exists ----
       const indexFound = cart.items.findIndex(
-        (item) => item.productId.id == productId,
+        item => item.productId.id == productId,
       );
       //------this removes an item from the the cart if the quantity is set to zero,We can use this method to remove an item from the list  -------
       if (indexFound !== -1 && quantity <= 0) {
@@ -26,7 +29,7 @@ exports.addItemToCart = async (req, res) => {
           cart.subTotal = 0;
         } else {
           cart.subTotal = cart.items
-            .map((item) => item.total)
+            .map(item => item.total)
             .reduce((acc, next) => acc + next);
         }
       }
@@ -38,7 +41,7 @@ exports.addItemToCart = async (req, res) => {
           cart.items[indexFound].quantity * productDetails.price;
         cart.items[indexFound].price = productDetails.price;
         cart.subTotal = cart.items
-          .map((item) => item.total)
+          .map(item => item.total)
           .reduce((acc, next) => acc + next);
       }
       //----Check if Quantity is Greater than 0 then add item to items Array ----
@@ -47,10 +50,12 @@ exports.addItemToCart = async (req, res) => {
           productId: productId,
           quantity: quantity,
           price: productDetails.price,
+          image: productDetails.imageUrl,
+          title: productDetails.title,
           total: parseInt(productDetails.price * quantity),
         });
         cart.subTotal = cart.items
-          .map((item) => item.total)
+          .map(item => item.total)
           .reduce((acc, next) => acc + next);
       }
       //----if quantity of price is 0 throw the error -------
@@ -76,13 +81,15 @@ exports.addItemToCart = async (req, res) => {
             quantity: quantity,
             total: parseInt(productDetails.price * quantity),
             price: productDetails.price,
+            title: productDetails.title,
+            image: productDetails.imageUrl,
           },
         ],
         subTotal: parseInt(productDetails.price * quantity),
       };
       cart = await cartRepository.addItem(cartData);
-      // let data = await cart.save();
-      res.json(cart);
+      let data = await cart.save();
+      res.json(data);
     }
   } catch (err) {
     console.log(err);
@@ -96,12 +103,7 @@ exports.addItemToCart = async (req, res) => {
 exports.getCart = async (req, res) => {
   try {
     let cart = await cartRepository.cart();
-    if (!cart) {
-      return res.status(400).json({
-        type: 'Invalid',
-        msg: 'Cart Not Found',
-      });
-    }
+
     res.status(200).json({
       status: true,
       data: cart,
@@ -134,5 +136,24 @@ exports.emptyCart = async (req, res) => {
       msg: 'Something Went Wrong',
       err: err,
     });
+  }
+};
+
+module.exports.deleteItem = async (req, res) => {
+  const userAccessKey = req.params.userAccessKey;
+  const productId = req.params.productId;
+  try {
+    let cart = await Cart.findOne({ userAccessKey });
+    let itemIndex = cart.items.findIndex(p => p.productId == productId);
+    if (itemIndex > -1) {
+      let productItem = cart.items[itemIndex];
+      cart.subTotal -= productItem.quantity * productItem.price;
+      cart.items.splice(itemIndex, 1);
+    }
+    cart = await cart.save();
+    return res.status(201).send(cart);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Something went wrong');
   }
 };

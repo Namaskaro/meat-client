@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 import AppHeader from '@/components/UI/AppHeader.vue';
 import AppFooter from '@/components/UI/AppFooter.vue';
 import Notification from '@/components/UI/Notification.vue';
@@ -29,19 +29,30 @@ export default {
     const { notification, setNotification, toggleNotification } = useNotification();
     return { notification, setNotification, toggleNotification };
   },
-  beforeMount() {
-    this.$store.dispatch('initTheme');
-    const existingUser = localStorage.getItem('user');
-    if (!existingUser) {
-      this.createUser();
-    }
-  },
+  // mounted() {
+  //   this.$store.dispatch('initTheme');
+  //   const token = localStorage.getItem('cartToken');
+  //   if (!token) {
+  //     this.createCart();
+  //   }
+  // },
 
   computed: {
-    ...mapGetters({ theme: 'getTheme' }),
+    ...mapGetters({
+      theme: 'getTheme',
+    }),
   },
   methods: {
-    ...mapActions(['resetTheme', 'cart/createUser', 'cart/deleteUser']),
+    ...mapActions({
+      cartAdd: 'cart/addProductToCart',
+      getCart: 'cart/getCart',
+      getUser: 'cart/getUser',
+      getItems: 'cart/getCartItems',
+      getUserAccessKey: 'cart/getUserAccessKey',
+    }),
+    ...mapMutations({
+      updateUserToken: 'cart/updateUserAccessKey',
+    }),
   },
   watch: {
     theme(newTheme, oldTheme) {
@@ -50,6 +61,17 @@ export default {
         : document.querySelector('html').classList.add('dark');
     },
   },
+  created() {
+    const userAccessKey = localStorage.getItem('userToken');
+    if (userAccessKey) {
+      this.updateUserToken(userAccessKey);
+    } else {
+      this.getUser();
+    }
+    // this.getCart();
+    // this.getItems();
+  },
+  mounted() {},
 };
 </script>
 

@@ -1,11 +1,10 @@
-const router = require("express-promise-router")();
+const router = require('express-promise-router')();
 
-const cart  = require("../controllers/cart.controller");
+const cart = require('../controllers/cart.controller');
 
-
-
-router.post("/", cart.addItemToCart);
-router.get("/", cart.getCart);
-router.delete("/empty-cart", cart.emptyCart);
+router.post('/', cart.addItemToCart);
+router.get('/', cart.getCart);
+router.delete('/empty-cart', cart.emptyCart);
+router.delete('/', cart.deleteItem);
 
 module.exports = router;

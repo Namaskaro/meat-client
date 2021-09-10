@@ -1,3 +1,3 @@
 module.exports = {
-  routes: ['cart', 'products', 'user'],
+  routes: ['cart', 'products', 'users'],
 };

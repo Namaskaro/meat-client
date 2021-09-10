@@ -24,7 +24,7 @@
           :title="product.title"
           :description="product.description"
           :image="product.imageUrl"
-          @add-to-cart="addToCart(product._id)"
+          @add-to-cart="addToCart(product._id, 1)"
         />
       </template>
     </FlexWrapper>
@@ -59,7 +59,7 @@ export default {
   methods: {
     ...mapActions({
       fetchProducts: 'products/fetchProducts',
-      getCart: 'cart/getCart',
+      // getCart: 'cart/getCart',
     }),
     addToCart(id, quantity) {
       this.$store.dispatch('cart/addProductToCart', {
@@ -70,7 +70,7 @@ export default {
   },
   mounted() {
     this.fetchProducts();
-    this.getCart();
+    // this.getCart();
   },
 };
 </script>

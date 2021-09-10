@@ -7,7 +7,16 @@
 </template>
 
 <script>
-export default {};
+import { mapGetters } from 'vuex';
+
+export default {
+  name: 'AppBadge',
+  // computed: {
+  //   ...mapGetters({
+  //     cartCount: 'cart/cartCount',
+  //   }),
+  // },
+};
 </script>
 
 <style></style>

@@ -1,92 +1,113 @@
 import axios from 'axios';
 import useNotification from '../composable/useNotification';
+import { getCart, deleteItem } from '../services/cart.service';
 import { createUser, getUser } from '../services/user.service';
-import { getCartItems } from '../services/cart.service';
 
 export default {
   namespaced: true,
   state: {
     userAccessKey: null,
-    user: null,
-    cart: {},
     cartItems: [],
+    cart: {},
+    cartTotal: 0,
   },
 
   getters: {
+    cartItems: state => state.cart.items,
+    // cartItems: (state, getters) => getters.cart.items,
+    // cartCount: state => state.cart.items.length,
+    cart: state => state.cart,
+    cartTotal: state => state.cart.subTotal,
     userAccessKey: state => state.userAccessKey,
-    user: state => state.user,
-    cartItems: state => state.cartItems,
   },
 
   mutations: {
+    setCart(state, cart) {
+      state.cart = cart;
+    },
+    setCartToken(state, cartToken) {
+      state.cartToken = cartToken;
+    },
+    // setCartTotal(state, cartTotal) {
+    //   state.cartTotal = cartTotal;
+    // },
+    setCartItems(state, cartItems) {
+      state.cartItems = cartItems;
+    },
     setUserAccessKey(state, userAccessKey) {
       state.userAccessKey = userAccessKey;
-    },
-    setUser(state, user) {
-      state.user = user;
     },
     updateUserAccessKey(state, userAccessKey) {
       state.userAccessKey = userAccessKey;
     },
-    updateCartProductsData(state, items) {
-      state.cartProductsData = items;
-    },
-    setCartItems(state, cartItems) {
-      state.cartItems = cartItems;
-    },
   },
 
   actions: {
-    async createUser({ commit }) {
+    async getUser({ commit }, state) {
       try {
-        const user = await createUser();
-        const userAccessKey = user.userAccessKey;
-        if (userAccessKey) {
-          localStorage.setItem('user', userAccessKey);
-        }
+        const userAccessKey = await createUser().then(res => res.userAccessKey);
+        localStorage.setItem('userToken', userAccessKey);
         commit('setUserAccessKey', userAccessKey);
-        commit('setUser', user);
       } catch (error) {
         console.log(error);
       }
     },
-
-    async getUser({ commit }) {
-      try {
-        const user = await getUser();
-        commit('setUser', user);
-      } catch (error) {
-        console.log(error);
-      }
+    async getUserAccessKey({ commit }) {
+      const id = localStorage.getItem('userToken');
+      const userAccessKey = await axios
+        .get(`http://localhost:4000/api/v1/users/${id}`)
+        .then(res => res.userAccessKey);
+      commit('updateUserAccessKey', userAccessKey);
     },
     async getCart({ commit }) {
       try {
-        const cartItems = await getCartItems();
+        const cart = await getCart();
+        commit('setCart', cart);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getCartItems({ commit }) {
+      try {
+        const cartItems = await axios
+          .get('http://localhost:4000/api/v1/cart')
+          .then(res => res.items);
         commit('setCartItems', cartItems);
       } catch (error) {
         console.log(error);
       }
     },
-    async addProductToCart({ state, commit }, { productId, quantity }) {
+    async addProductToCart({ dispatch, commit }, { productId, quantity }) {
       try {
-        await axios
+        const cart = await axios
           .post(
             'http://localhost:4000/api/v1/cart',
             {
               productId,
               quantity,
             },
-            {
-              params: {
-                userAccessKey: state.userAccessKey,
-              },
-            },
+            // {
+            //   params: {
+            //     userAccessKey: state.userAccessKey,
+            //   },
+            // },
           )
           .then(res => {
+            dispatch('getCart');
             const { setNotification } = useNotification();
             setNotification(`Товар ${productId} добавлен в корзину`);
-            commit('updateCartProductsData');
+            const cartItems = res.data.items;
+            commit('setCartItems', cartItems);
+            commit('setCart', cart);
           });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async deleteItemFromCart({ commit }) {
+      try {
+        await deleteItem();
+        commit('deleteItem');
       } catch (error) {
         console.log(error);
       }
