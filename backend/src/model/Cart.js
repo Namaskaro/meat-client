@@ -32,7 +32,7 @@ let ItemSchema = new Schema(
 );
 const CartSchema = new Schema(
   {
-    userAccessKey: {
+    userId: {
       type: String,
     },
     items: [ItemSchema],

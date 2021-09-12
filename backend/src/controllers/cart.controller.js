@@ -1,15 +1,16 @@
 const cartRepository = require('./cart.repository');
 const productRepository = require('./product.repository');
 const Cart = require('../model/Cart');
-const jwt = require('jsonwebtoken');
 
 exports.addItemToCart = async (req, res) => {
   const { productId } = req.body;
+  const { userId } = req.body;
   const quantity = Number.parseInt(req.body.quantity);
+  console.log(userId);
   try {
-    let cart = await cartRepository.cart();
+    // let cart = await cartRepository.cart();
+    let cart = await Cart.findOne({ userId });
     let productDetails = await productRepository.productById(productId);
-    console.log(productDetails);
     if (!productDetails) {
       return res.status(500).json({
         type: 'Not Found',
@@ -74,7 +75,23 @@ exports.addItemToCart = async (req, res) => {
     }
     //------------ if there is no user with a cart...it creates a new cart and then adds the item to the cart that has been created------------
     else {
-      const cartData = {
+      // const cartData = {
+      //   userId,
+      //   items: [
+      //     {
+      //       productId: productId,
+      //       quantity: quantity,
+      //       total: parseInt(productDetails.price * quantity),
+      //       price: productDetails.price,
+      //       title: productDetails.title,
+      //       image: productDetails.imageUrl,
+      //     },
+      //   ],
+      //   subTotal: parseInt(productDetails.price * quantity),
+      // };
+      // cart = await cartRepository.addItem(cartData);
+      const cart = await Cart.create({
+        userId,
         items: [
           {
             productId: productId,
@@ -86,10 +103,9 @@ exports.addItemToCart = async (req, res) => {
           },
         ],
         subTotal: parseInt(productDetails.price * quantity),
-      };
-      cart = await cartRepository.addItem(cartData);
+      });
       let data = await cart.save();
-      res.json(data);
+      return res.status(201).send(data);
     }
   } catch (err) {
     console.log(err);
@@ -101,13 +117,14 @@ exports.addItemToCart = async (req, res) => {
   }
 };
 exports.getCart = async (req, res) => {
+  const { userId } = req.query;
   try {
-    let cart = await cartRepository.cart();
-
-    res.status(200).json({
-      status: true,
-      data: cart,
-    });
+    let cart = await Cart.findOne({ userId });
+    if (cart && cart.items.length > 0) {
+      res.send(cart);
+    } else {
+      res.send(null);
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json({

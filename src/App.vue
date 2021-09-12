@@ -30,7 +30,7 @@ export default {
     return { notification, setNotification, toggleNotification };
   },
   // mounted() {
-  //   this.$store.dispatch('initTheme');
+  //
   //   const token = localStorage.getItem('cartToken');
   //   if (!token) {
   //     this.createCart();
@@ -44,10 +44,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      cartAdd: 'cart/addProductToCart',
       getCart: 'cart/getCart',
       getUser: 'cart/getUser',
-      getItems: 'cart/getCartItems',
       getUserAccessKey: 'cart/getUserAccessKey',
     }),
     ...mapMutations({
@@ -62,13 +60,14 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch('initTheme');
     const userAccessKey = localStorage.getItem('userToken');
     if (userAccessKey) {
       this.updateUserToken(userAccessKey);
     } else {
       this.getUser();
     }
-    // this.getCart();
+    this.getCart();
     // this.getItems();
   },
   mounted() {},

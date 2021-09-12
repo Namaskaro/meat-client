@@ -3,13 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build",
     "start": "vue-cli-service serve --mode production",
     "render": "vue-cli-service build:prerender",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vuelidate/core": "^2.0.0-alpha.25",
+    "@vuelidate/validators": "^2.0.0-alpha.21",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "prerender-spa-plugin": "^3.4.0",

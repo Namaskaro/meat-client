@@ -43,7 +43,7 @@ export default {
   },
 
   actions: {
-    async getUser({ commit }, state) {
+    async getUser({ commit }) {
       try {
         const userAccessKey = await createUser().then(res => res.userAccessKey);
         localStorage.setItem('userToken', userAccessKey);
@@ -59,9 +59,12 @@ export default {
         .then(res => res.userAccessKey);
       commit('updateUserAccessKey', userAccessKey);
     },
-    async getCart({ commit }) {
+    async getCart({ commit, state }) {
+      const userId = state.userAccessKey;
       try {
-        const cart = await getCart();
+        const cart = await axios
+          .get(`http://localhost:4000/api/v1/cart/${userId}`, { params: { userId } })
+          .then(res => res.data);
         commit('setCart', cart);
       } catch (error) {
         console.log(error);
@@ -77,20 +80,22 @@ export default {
         console.log(error);
       }
     },
-    async addProductToCart({ dispatch, commit }, { productId, quantity }) {
+    async addProductToCart({ dispatch, commit, state }, { productId, quantity }) {
+      const userId = state.userAccessKey;
       try {
         const cart = await axios
           .post(
-            'http://localhost:4000/api/v1/cart',
+            `http://localhost:4000/api/v1/cart/${userId}`,
             {
               productId,
               quantity,
+              userId,
             },
-            // {
-            //   params: {
-            //     userAccessKey: state.userAccessKey,
-            //   },
-            // },
+            {
+              params: {
+                userId: state.userAccessKey,
+              },
+            },
           )
           .then(res => {
             dispatch('getCart');
