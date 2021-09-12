@@ -66,7 +66,8 @@
       "no-underscore-dangle": "off",
       "no-plusplus": "off",
       "object-curly-newline": "off",
-      "vue/no-unused-vars": "off"
+      "vue/no-unused-vars": "off",
+      "no-param-reassign": "off"
     }
   },
   "browserslist": [

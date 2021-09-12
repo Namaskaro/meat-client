@@ -9,7 +9,9 @@ exports.addItemToCart = async (req, res) => {
   console.log(userId);
   try {
     // let cart = await cartRepository.cart();
-    let cart = await Cart.findOne({ userId });
+    let cart = await Cart.findOne({ userId }).populate({
+      path: 'items.productId',
+    });
     let productDetails = await productRepository.productById(productId);
     if (!productDetails) {
       return res.status(500).json({

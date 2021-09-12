@@ -3,9 +3,11 @@ const productRepository = require('./product.repository');
 exports.createProduct = async (req, res) => {
   try {
     let payload = {
-      name: req.body.name,
+      title: req.body.title,
+      description: req.body.description,
       price: req.body.price,
-      image: req.file.path,
+      amount: req.body.amount,
+      imageUrl: req.body.imageUrl,
     };
     let product = await productRepository.createProduct({
       ...payload,

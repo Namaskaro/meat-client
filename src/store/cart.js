@@ -91,11 +91,11 @@ export default {
               quantity,
               userId,
             },
-            {
-              params: {
-                userId: state.userAccessKey,
-              },
-            },
+            // {
+            //   params: {
+            //     userId: state.userAccessKey,
+            //   },
+            // },
           )
           .then(res => {
             dispatch('getCart');
