@@ -91,6 +91,10 @@ export default {
   padding: 2rem 4rem !important;
 }
 
+.size-full {
+  @apply w-full py-2;
+}
+
 .transparent {
   background-color: transparent;
 }

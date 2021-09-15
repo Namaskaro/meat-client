@@ -10,7 +10,10 @@
     </div>
     <div class="flex justify-center items-center">
       <div class="pr-8 flex justify-center items-center">
-        <button class="font-semibold text-2xl text-gray-600 dark:text-white hover:text-green-500">
+        <button
+          class="font-semibold text-2xl text-gray-600 dark:text-white hover:text-green-500"
+          @click="$emit('decrease-qty')"
+        >
           -
         </button>
         <input
@@ -21,6 +24,7 @@
         />
         <button
           class="font-semibold text-xl flex justify-center items-center text-gray-600 dark:text-white hover:text-green-500"
+          @click="$emit('increase-qty')"
         >
           +
         </button>
@@ -28,7 +32,7 @@
       <div class="pr-8 ">
         <span class="text-sm font-medium text-gray-600 dark:text-white">{{ price }}</span>
       </div>
-      <IconX />
+      <button @click="$emit('remove-item')"><IconX /></button>
     </div>
   </div>
 </template>
@@ -55,8 +59,12 @@ export default {
     image: {
       type: String,
     },
+    quantity: {
+      type: Number,
+      default: 1,
+    },
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'increase-qty', 'decrease-qty', 'remove-item'],
 };
 </script>
 

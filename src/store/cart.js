@@ -13,9 +13,8 @@ export default {
   },
 
   getters: {
-    cartItems: state => state.cart.items,
-    // cartItems: (state, getters) => getters.cart.items,
-    // cartCount: state => state.cart.items.length,
+    cartItems: ({ cartItems }) => cartItems,
+    cartCount: state => state.cartItems.length,
     cart: state => state.cart,
     cartTotal: state => state.cart.subTotal,
     userAccessKey: state => state.userAccessKey,
@@ -39,6 +38,9 @@ export default {
     },
     updateUserAccessKey(state, userAccessKey) {
       state.userAccessKey = userAccessKey;
+    },
+    updateCartProductQuantity(state, { productId, quantity }) {
+      const item = state.cartItems.find(item => item.productId === productId);
     },
   },
 
@@ -66,6 +68,7 @@ export default {
           .get(`http://localhost:4000/api/v1/cart/${userId}`, { params: { userId } })
           .then(res => res.data);
         commit('setCart', cart);
+        commit('setCartItems', cart.items);
       } catch (error) {
         console.log(error);
       }
@@ -98,21 +101,30 @@ export default {
             // },
           )
           .then(res => {
-            dispatch('getCart');
             const { setNotification } = useNotification();
-            setNotification(`Товар ${productId} добавлен в корзину`);
+            setNotification(`Товар ${productId.title} добавлен в корзину`);
             const cartItems = res.data.items;
-            commit('setCartItems', cartItems);
-            commit('setCart', cart);
+            // commit('setCartItems', cartItems);
+            // commit('setCart', cart);
+            dispatch('getCart');
+            // dispatch('getCartItems', cartItems);
           });
       } catch (error) {
         console.log(error);
       }
     },
-    async deleteItemFromCart({ commit }) {
+    async deleteItemFromCart({ commit, state }, productId) {
+      const userId = state.userAccessKey;
       try {
-        await deleteItem();
-        commit('deleteItem');
+        const cart = await axios
+          .delete(`http://localhost:4000/api/v1/cart/${userId}/${productId}`, {
+            params: { userId, productId },
+          })
+          .then(res => {
+            const cartItems = res.data.items;
+            commit('setCart', cart);
+            commit('setCartItems', cartItems);
+          });
       } catch (error) {
         console.log(error);
       }

@@ -14,8 +14,8 @@
       <div class="w-2/5 lg:w-2/5 inline-flex justify-end lg:justify-end ml-5 lg:ml-0 relative">
         <router-link to="/cart">
           <IconBag />
+          <AppBadge />
         </router-link>
-        <AppBadge />
       </div>
     </div>
   </header>

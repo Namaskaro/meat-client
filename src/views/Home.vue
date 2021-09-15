@@ -55,6 +55,13 @@ export default {
       isLoading: 'products/isLoading',
       cartItems: 'cart/cartItems',
     }),
+    // cartItemsIds() {
+    //   if (!this.cartItems) {
+    //     return;
+    //   }
+    //   return this.cartItems.map(({ _id }) => _id);
+    // },
+    // cartItemsIds: ({ cartItems }) => cartItems.map(({ _id }) => _id),
   },
   methods: {
     ...mapActions({

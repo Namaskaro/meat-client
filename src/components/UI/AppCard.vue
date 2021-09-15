@@ -20,7 +20,8 @@
         Купить
         <IconCart iconColor="#ffffff" height="5" width="5" class="mt-1 ml-1" />
       </AppButton> -->
-      <button @click="$emit('add-to-cart')">Купить</button>
+      <button @click="$emit('add-to-cart')" v-if="!inCart">Купить</button>
+      <button @click="$emit('add-to-cart')" v-if="inCart">Удалить</button>
       <router-link :to="{ name: 'product', params: { id: product._id } }">Read more</router-link>
       <!-- <button @click="$emit('to-product-details')">Подробнее</button> -->
     </div>
@@ -61,6 +62,10 @@ export default {
     product: {
       type: Object,
       default: () => {},
+    },
+    inCart: {
+      type: Boolean,
+      default: false,
     },
   },
 

@@ -8,7 +8,7 @@ import Checkout from '@/views/Checkout.vue';
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home,
     meta: { transition: 'fade' },
   },
