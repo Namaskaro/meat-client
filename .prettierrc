@@ -2,7 +2,7 @@
   "tabWidth": 2,
   "singleQuote": true,
   "trailingComma": "all",
-  "printWidth": 100,
+  "printWidth": 150,
   "bracketSpacing": true,
   "semi": true,
   "no-multiple-empty-lines": ["error", { "max": 2, "maxBOF": 0, "maxEOF": 0 }]

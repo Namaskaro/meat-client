@@ -207,7 +207,7 @@ module.exports.removeItem = async (req, res) => {
 };
 
 module.exports.deleteItem = async (req, res) => {
-  const userId = req.params.userId;
+  const userId = req.body;
   const productId = req.body;
   try {
     const cart = await Cart.findOne({ userId }).populate({

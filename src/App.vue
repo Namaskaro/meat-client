@@ -1,46 +1,26 @@
 <template>
   <div class="relative">
-    <AppHeader />
-    <transition name="fade" mode="out-in">
-      <router-view />
-    </transition>
-    <transition name="fade" mode="out-in">
-      <Notification :notification="notification" :toggleNotification="toggleNotification">
-      </Notification>
-    </transition>
-    <AppFooter />
+    <component :is="layout"> </component>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import AppHeader from '@/components/UI/AppHeader.vue';
-import AppFooter from '@/components/UI/AppFooter.vue';
-import Notification from '@/components/UI/Notification.vue';
-import useNotification from '@/composable/useNotification';
+import ShopLayout from '@/layouts/ShopLayout.vue';
+import AuthLayout from '@/layouts/AuthLayout.vue';
 
 export default {
   components: {
-    AppHeader,
-    AppFooter,
-    Notification,
+    ShopLayout,
+    AuthLayout,
   },
-  setup() {
-    const { notification, setNotification, toggleNotification } = useNotification();
-    return { notification, setNotification, toggleNotification };
-  },
-  // mounted() {
-  //
-  //   const token = localStorage.getItem('cartToken');
-  //   if (!token) {
-  //     this.createCart();
-  //   }
-  // },
-
   computed: {
     ...mapGetters({
       theme: 'getTheme',
     }),
+    layout() {
+      return (this.$route.meta.layout || 'shop') + '-layout';
+    },
   },
   methods: {
     ...mapActions({
@@ -54,9 +34,7 @@ export default {
   },
   watch: {
     theme(newTheme, oldTheme) {
-      newTheme === 'light'
-        ? document.querySelector('html').classList.remove('dark')
-        : document.querySelector('html').classList.add('dark');
+      newTheme === 'light' ? document.querySelector('html').classList.remove('dark') : document.querySelector('html').classList.add('dark');
     },
   },
   created() {
@@ -68,19 +46,8 @@ export default {
       this.getUser();
     }
     this.getCart();
-    // this.getItems();
   },
-  mounted() {},
 };
 </script>
 
-<style lang="css">
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease-in-out;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
+<style lang="css"></style>

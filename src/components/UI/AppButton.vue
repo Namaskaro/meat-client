@@ -1,13 +1,8 @@
 <template>
   <button
-    :class="[
-      $style.baseButton,
-      variant && $style[variant],
-      $style[`size-${size}`],
-      $style[`text-${text}`],
-      $style[`rounded-${rounded}`],
-    ]"
+    :class="[$style.baseButton, variant && $style[variant], $style[`size-${size}`], $style[`text-${text}`], $style[`rounded-${rounded}`]]"
     v-bind="$attrs"
+    @click="$emit('click')"
   >
     <slot v-if="loading" name="loader">
       <p>Loading...</p>
@@ -19,7 +14,7 @@
 
 <script>
 export default {
-  name: 'BaseButton',
+  name: 'AppButton',
   components: {},
   props: {
     title: {

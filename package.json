@@ -16,12 +16,14 @@
     "@vuelidate/validators": "^2.0.0-alpha.21",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "maska": "^1.4.5",
     "prerender-spa-plugin": "^3.4.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.14.5",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
@@ -69,7 +71,9 @@
       "no-plusplus": "off",
       "object-curly-newline": "off",
       "vue/no-unused-vars": "off",
-      "no-param-reassign": "off"
+      "no-param-reassign": "off",
+      "consistent-return": "off",
+      "prefer-template": "off"
     }
   },
   "browserslist": [

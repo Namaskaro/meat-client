@@ -1,6 +1,6 @@
 import axios from 'axios';
 import useNotification from '../composable/useNotification';
-import { getCart, deleteItem } from '../services/cart.service';
+import { getCart, removeItem } from '../services/cart.service';
 import { createUser, getUser } from '../services/user.service';
 
 export default {
@@ -27,9 +27,6 @@ export default {
     setCartToken(state, cartToken) {
       state.cartToken = cartToken;
     },
-    // setCartTotal(state, cartTotal) {
-    //   state.cartTotal = cartTotal;
-    // },
     setCartItems(state, cartItems) {
       state.cartItems = cartItems;
     },
@@ -42,6 +39,10 @@ export default {
     updateCartProductQuantity(state, { productId, quantity }) {
       const item = state.cartItems.find(item => item.productId === productId);
     },
+    // setCartIsNotEmpty(state) {
+    //   localStorage.setItem('isEmpty', false);
+    //   state.isEmpty = false;
+    // },
   },
 
   actions: {
@@ -56,17 +57,13 @@ export default {
     },
     async getUserAccessKey({ commit }) {
       const id = localStorage.getItem('userToken');
-      const userAccessKey = await axios
-        .get(`http://localhost:4000/api/v1/users/${id}`)
-        .then(res => res.userAccessKey);
+      const userAccessKey = await axios.get(`http://localhost:4000/api/v1/users/${id}`).then(res => res.userAccessKey);
       commit('updateUserAccessKey', userAccessKey);
     },
     async getCart({ commit, state }) {
       const userId = state.userAccessKey;
       try {
-        const cart = await axios
-          .get(`http://localhost:4000/api/v1/cart/${userId}`, { params: { userId } })
-          .then(res => res.data);
+        const cart = await axios.get(`http://localhost:4000/api/v1/cart/${userId}`, { params: { userId } }).then(res => res.data);
         commit('setCart', cart);
         commit('setCartItems', cart.items);
       } catch (error) {
@@ -75,9 +72,7 @@ export default {
     },
     async getCartItems({ commit }) {
       try {
-        const cartItems = await axios
-          .get('http://localhost:4000/api/v1/cart')
-          .then(res => res.items);
+        const cartItems = await axios.get('http://localhost:4000/api/v1/cart').then(res => res.items);
         commit('setCartItems', cartItems);
       } catch (error) {
         console.log(error);
@@ -87,28 +82,29 @@ export default {
       const userId = state.userAccessKey;
       try {
         const cart = await axios
-          .post(
-            `http://localhost:4000/api/v1/cart/${userId}`,
-            {
-              productId,
-              quantity,
-              userId,
-            },
-            // {
-            //   params: {
-            //     userId: state.userAccessKey,
-            //   },
-            // },
-          )
+          .post(`http://localhost:4000/api/v1/cart/${userId}`, {
+            productId,
+            quantity,
+            userId,
+          })
           .then(res => {
             const { setNotification } = useNotification();
-            setNotification(`Товар ${productId.title} добавлен в корзину`);
-            const cartItems = res.data.items;
-            // commit('setCartItems', cartItems);
-            // commit('setCart', cart);
+            setNotification('Товар успешно добавлен');
             dispatch('getCart');
-            // dispatch('getCartItems', cartItems);
           });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async decrementQuantity({ dispatch, state }, { productId, quantity }) {
+      const userId = state.userAccessKey;
+      try {
+        const cart = axios.put(`http://localhost:4000/api/v1/cart/${userId}`, {
+          productId,
+          quantity,
+          userId,
+        });
+        dispatch('getCart');
       } catch (error) {
         console.log(error);
       }
@@ -116,15 +112,11 @@ export default {
     async deleteItemFromCart({ commit, state }, productId) {
       const userId = state.userAccessKey;
       try {
-        const cart = await axios
-          .delete(`http://localhost:4000/api/v1/cart/${userId}/${productId}`, {
-            params: { userId, productId },
-          })
-          .then(res => {
-            const cartItems = res.data.items;
-            commit('setCart', cart);
-            commit('setCartItems', cartItems);
-          });
+        const cart = await axios.delete(`http://localhost:4000/api/v1/cart/${userId}`, { userId, productId }).then(res => {
+          const cartItems = res.data.items;
+          commit('setCart', cart);
+          commit('setCartItems', cartItems);
+        });
       } catch (error) {
         console.log(error);
       }

@@ -6,13 +6,7 @@
   <main>
     <FlexWrapper>
       <template #loader>
-        <Loader
-          v-if="isLoading"
-          :animation-duration="2000"
-          :size="65"
-          color="red"
-          class="absolute inset-2/4"
-        />
+        <Loader v-if="isLoading" :animation-duration="2000" :size="65" color="red" class="absolute inset-2/4" />
       </template>
 
       <template #content>
@@ -56,17 +50,15 @@ export default {
       cartItems: 'cart/cartItems',
     }),
     // cartItemsIds() {
-    //   if (!this.cartItems) {
-    //     return;
-    //   }
-    //   return this.cartItems.map(({ _id }) => _id);
+    //   return this.cartItems?.map(({ _id }) => _id);
     // },
-    // cartItemsIds: ({ cartItems }) => cartItems.map(({ _id }) => _id),
+    // productInCart(id) {
+    //   return this.cartItemsIds?.includes(id);
+    // },
   },
   methods: {
     ...mapActions({
       fetchProducts: 'products/fetchProducts',
-      // getCart: 'cart/getCart',
     }),
     addToCart(id, quantity) {
       this.$store.dispatch('cart/addProductToCart', {
@@ -77,7 +69,6 @@ export default {
   },
   mounted() {
     this.fetchProducts();
-    // this.getCart();
   },
 };
 </script>

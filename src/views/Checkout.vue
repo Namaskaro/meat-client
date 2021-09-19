@@ -5,7 +5,10 @@
         <div class="w-full">
           <div class="md:grid md:grid-cols-12 gap-2 ">
             <div class="col-span-7">
-              <form class="max-w-xl m-4 p-6 bg-white rounded-lg shadow-xl">
+              <form
+                class="max-w-xl m-4 p-6 bg-white rounded-lg shadow-xl"
+                @submit.prevent="console.log('Вы все оплатили')"
+              >
                 <p class="text-gray-800 font-medium">Customer information</p>
                 <div class="mt-2">
                   <label class="block text-sm text-gray-00">Имя</label>
@@ -23,6 +26,8 @@
                     type="text"
                     placeholder="Телефон"
                     aria-label="Phone"
+                    v-maska="['+7 (###) ##-##-##', '+7 (###) ###-##-##']"
+                    v-model="phone"
                   />
                 </div>
                 <div class="mt-2">
@@ -32,6 +37,7 @@
                     type="text"
                     placeholder="Ваш email"
                     aria-label="Email"
+                    v-model="email"
                   />
                 </div>
                 <div class="mt-2">
@@ -41,6 +47,7 @@
                     type="text"
                     placeholder="Город"
                     aria-label="City"
+                    v-model="city"
                   />
                 </div>
                 <div class="mt-2">
@@ -50,11 +57,14 @@
                     type="text"
                     placeholder="Адрес"
                     aria-label="Address"
+                    v-model="address"
                   />
                 </div>
                 <div class="inline-block mt-2 w-1/2 pr-1">
-                  <label class=" block text-sm text-gray-600" for="cus_email">Country</label>
-                  <AppSelect :options="deliveryType" />
+                  <label class=" block text-sm text-gray-600" for="cus_email"
+                    >Выберите способ доставки</label
+                  >
+                  <AppSelect v-model="delivery" :options="deliveryOptions" />
                 </div>
                 <!-- <div class="inline-block mt-2 -mx-1 pl-1 w-1/2">
                   <label class=" block text-sm text-gray-600">Zip</label>
@@ -62,7 +72,7 @@
                 </div> -->
                 <div class="mt-4">
                   <AppButton title="Купить" text="white" variant="green" rounded="xl" size="full">
-                    <router-link to="{ name: 'order-done' }">
+                    <router-link :to="{ name: 'order-done' }">
                       Оплатить
                     </router-link>
                   </AppButton>
@@ -89,9 +99,11 @@
 </template>
 
 <script>
+import { ref, reactive } from 'vue';
 import { mapGetters, mapActions } from 'vuex';
 import useVuelidate from '@vuelidate/core';
 import { required, email, minLength } from '@vuelidate/validators';
+import { maska } from 'maska';
 import CheckoutItem from '@/components/UI/CheckoutItem.vue';
 import AppButton from '@/components/UI/AppButton.vue';
 import AppSelect from '@/components/UI/AppSelect.vue';
@@ -102,17 +114,25 @@ export default {
     AppButton,
     AppSelect,
   },
+  directives: { maska },
   setup() {
-    return { v$: useVuelidate() };
+    const name = ref('');
+    const delivery = ref('Курьером');
+    const deliveryOptions = reactive(['Курьером', 'Самовывоз']);
+    return {
+      name,
+      delivery,
+      deliveryOptions,
+      v$: useVuelidate(),
+    };
   },
 
   data() {
     return {
-      form: {
-        email: '',
-        password: '',
-      },
-      deliveryType: [{ title: 'Самовывоз' }, { title: 'Курьером' }],
+      phone: '',
+      email: '',
+      city: '',
+      address: '',
     };
   },
   computed: {
