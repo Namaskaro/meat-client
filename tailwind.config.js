@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         header: '#ffffff',
         airbnb: '#ff5a5f',
+        admin: '#5D70A4',
         facebook: '#1877F2',
         google: '#413F61',
         lynch: '#71809d',

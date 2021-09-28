@@ -4,12 +4,10 @@ const schema = new Schema({
   login: {
     type: String,
     default: '',
-    unique: true,
   },
   password: {
     type: String,
     default: '',
-    unique: true,
   },
 });
 

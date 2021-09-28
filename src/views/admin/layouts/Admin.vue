@@ -1,5 +1,18 @@
 <template>
-  <div class="flex justify-center align-center h-100vh">
-    <router-view> </router-view>
+  <div>
+    <router-view />
   </div>
 </template>
+
+<script>
+// import AdminHeader from '@/components/admin/AdminHeader.vue';
+// import AdminSidebar from '@/components/admin/AdminSidebar.vue';
+
+export default {
+  name: 'Admin',
+  // components: {
+  //   AdminHeader,
+  //   AdminSidebar,
+  // },
+};
+</script>

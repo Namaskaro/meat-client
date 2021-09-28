@@ -1,0 +1,30 @@
+name: lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    container:
+      image: node:14.17.0-alpine
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Lint source code eith ESLint
+        run: npm run lint
+
+  prettier:
+    runs-on: ubuntu-latest
+    container:
+      image: node:14.17.0-alpine
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Lint source code eith Prettier
+        run: npm run check:format

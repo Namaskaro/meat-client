@@ -8,11 +8,13 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import ShopLayout from '@/layouts/ShopLayout.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
+import AdminLayout from '@/layouts/AdminLayout.vue';
 
 export default {
   components: {
     ShopLayout,
     AuthLayout,
+    AdminLayout,
   },
   computed: {
     ...mapGetters({

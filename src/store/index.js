@@ -2,6 +2,7 @@ import { createStore } from 'vuex';
 import products from './products';
 import theme from './theme';
 import cart from './cart';
+import admin from './admin';
 
 export default createStore({
   state: {
@@ -24,6 +25,7 @@ export default createStore({
     products,
     theme,
     cart,
+    admin,
   },
   strict: process.env.NODE_ENV !== 'production',
 });

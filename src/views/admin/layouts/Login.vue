@@ -1,7 +1,6 @@
 <template>
   <div class="flex">
-    <form class="max-w-xl m-4 p-6 bg-white rounded-lg shadow-xl" @submit.prevent="console.log('Вы все оплатили')">
-      <p class="text-gray-800 font-medium">Customer information</p>
+    <form class="max-w-xl m-4 p-6 bg-white rounded-lg shadow-xl" @submit.prevent="handleLogin">
       <div class="mt-2">
         <label class="block text-sm text-gray-00">Имя</label>
         <input
@@ -9,7 +8,7 @@
           type="text"
           placeholder="Ваше имя"
           aria-label="Name"
-          v-model="name"
+          v-model="login"
         />
       </div>
       <div class="mt-2">
@@ -25,7 +24,7 @@
       <div class="mt-4">
         <AppButton title="Купить" text="white" variant="green" rounded="xl" size="full">
           <router-link :to="{ name: 'order-done' }">
-            Оплатить
+            Войти
           </router-link>
         </AppButton>
       </div>
@@ -34,7 +33,24 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'Login',
+  data() {
+    return {
+      login: '',
+      password: '',
+    };
+  },
+  methods: {
+    ...mapActions({
+      login: 'admin/login',
+    }),
+    async handleLogin() {
+      await this.login({ login, password });
+      this.router.push({ name: 'admin' });
+    },
+  },
 };
 </script>
