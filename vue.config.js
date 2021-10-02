@@ -1,12 +1,15 @@
-module.exports = {
-  filenameHashing: false,
-  chainWebpack: config => {
-    config.plugin('html').tap(options => {
-      options[0].minify = false;
-      return options;
-    });
-  },
-  configureWebpack: {
+const proxy = require('./proxy.server');
+
+const chainWebpack = config => {
+  config.plugin('html').tap(options => {
+    options[0].minify = false;
+    return options;
+  });
+};
+
+const configureWebpack = config => {
+  return {
+    devServer: { proxy },
     module: {
       rules: [
         {
@@ -15,5 +18,12 @@ module.exports = {
         },
       ],
     },
-  },
+  };
+};
+
+module.exports = {
+  filenameHashing: false,
+  productionSourceMap: false,
+  configureWebpack,
+  chainWebpack,
 };

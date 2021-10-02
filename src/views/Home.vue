@@ -18,6 +18,7 @@
           :title="product.title"
           :description="product.description"
           :image="product.imageUrl"
+          :inCart="cartItemsIds.includes(product._id)"
           @add-to-cart="addToCart(product._id, 1)"
         />
       </template>
@@ -49,9 +50,9 @@ export default {
       isLoading: 'products/isLoading',
       cartItems: 'cart/cartItems',
     }),
-    // cartItemsIds() {
-    //   return this.cartItems?.map(({ _id }) => _id);
-    // },
+    cartItemsIds() {
+      return this.cartItems?.map(({ _id }) => _id);
+    },
     // productInCart(id) {
     //   return this.cartItemsIds?.includes(id);
     // },
@@ -65,6 +66,7 @@ export default {
         productId: id,
         quantity: 1,
       });
+      console.log(this.cartItemsIds);
     },
   },
   mounted() {

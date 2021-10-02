@@ -1,14 +1,18 @@
 <template>
   <div class="flex md:justify-between justify-center flex-wrap items-center mt-6 pt-6 ">
     <div class="flex items-center flex-wrap">
-      <img :src="image" class="w-3/12" />
+      <img :src="image" class="w-3/12 " />
       <div class="flex flex-col md:ml-3 w-full  md:w-1/2 lg:w-4/12">
         <span class="md:text-md font-medium text-center text-gray-600 dark:text-white">{{ title }}</span>
       </div>
     </div>
     <div class="flex justify-center items-center">
       <div class="pr-8 flex justify-center items-center">
-        <button class="font-semibold text-2xl text-gray-600 dark:text-white hover:text-green-500" @click="$emit('decrease-qty')">
+        <button
+          class="font-semibold text-2xl text-gray-600 dark:text-white hover:text-green-500"
+          @click="$emit('decrease-qty')"
+          :disabled="!canDecrease"
+        >
           -
         </button>
         <input
@@ -41,6 +45,10 @@ export default {
     IconX,
   },
   props: {
+    canDecrease: {
+      type: Boolean,
+      default: true,
+    },
     modelValue: {
       type: Number,
       default: 1,

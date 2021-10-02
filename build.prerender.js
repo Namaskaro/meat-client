@@ -1,6 +1,7 @@
 const path = require('path');
 const PrerenderSPAPlugin = require('prerender-spa-plugin');
 const proxy = require('./proxy.server');
+const rimraf = require('rimraf');
 
 module.exports = (api, options) => {
   let staticDir = path.join(__dirname, options.outputDir);
@@ -20,7 +21,7 @@ module.exports = (api, options) => {
         },
       ]);
     });
-
+    rimraf.sync(outputDir);
     await api.service.run('build');
   });
 };

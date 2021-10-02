@@ -17,6 +17,7 @@
                     :productId="item.productId"
                     :quantity="item.quantity"
                     v-model="item.quantity"
+                    :canDecrease="item.quantity > 1"
                     @removeItem="deleteCartItem(item.productId)"
                     @increase-qty="plusQty(item.productId, 1)"
                     @decrease-qty="minusQty(item.productId, 1)"
@@ -26,25 +27,13 @@
                     <span>{{ total }}</span>
                   </div>
                   <div class="flex justify-between flex-wrap mt-12">
-                    <AppButton
-                      title="Продолжить покупки"
-                      text="white"
-                      variant="green"
-                      rounded="2xl"
-                      size="sm"
-                    >
+                    <AppButton title="Продолжить покупки" text="white" variant="green" rounded="2xl" size="sm">
                       <IconArrowLeft />
                       <router-link :to="{ name: 'home' }">
                         Продолжить покупки
                       </router-link>
                     </AppButton>
-                    <AppButton
-                      title="Оформить заказ"
-                      text="white"
-                      variant="green"
-                      rounded="2xl"
-                      size="sm"
-                    >
+                    <AppButton title="Оформить заказ" text="white" variant="green" rounded="2xl" size="sm">
                       <router-link :to="{ name: 'checkout' }">
                         Оформить заказ
                       </router-link>

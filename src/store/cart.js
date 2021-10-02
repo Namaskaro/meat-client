@@ -99,7 +99,7 @@ export default {
     async decrementQuantity({ dispatch, state }, { productId, quantity }) {
       const userId = state.userAccessKey;
       try {
-        const cart = axios.put(`http://localhost:4000/api/v1/cart/${userId}`, {
+        const cart = axios.patch(`http://localhost:4000/api/v1/cart/${userId}`, {
           productId,
           quantity,
           userId,
@@ -109,14 +109,13 @@ export default {
         console.log(error);
       }
     },
-    async deleteItemFromCart({ commit, state }, productId) {
+    async deleteItemFromCart({ commit, dispatch, state }, productId) {
       const userId = state.userAccessKey;
       try {
-        const cart = await axios.delete(`http://localhost:4000/api/v1/cart/${userId}`, { userId, productId }).then(res => {
-          const cartItems = res.data.items;
-          commit('setCart', cart);
-          commit('setCartItems', cartItems);
-        });
+        const cart = await axios.delete(`http://localhost:4000/api/v1/cart/${userId}/${productId}`);
+        dispatch('getCart', cart);
+        // commit('setCart', cart);
+        commit('setCartItems', cart.items);
       } catch (error) {
         console.log(error);
       }
