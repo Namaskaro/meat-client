@@ -1,25 +1,44 @@
 <template>
-  <!-- <AppBanner>
-    <div class="container mx-auto"></div>
-  </AppBanner> -->
+  <AppSlider />
 
   <main>
     <FlexWrapper>
       <template #loader>
         <Loader v-if="isLoading" :animation-duration="2000" :size="65" color="red" class="absolute inset-2/4" />
       </template>
-
       <template #content>
+        <div class="col-span-full">
+          <h1>Свинина</h1>
+        </div>
         <AppCard
-          v-for="product in products"
+          v-for="product in pork"
           :key="product._id"
           :product="product"
           :price="product.price"
           :title="product.title"
           :description="product.description"
           :image="product.imageUrl"
-          :inCart="cartItemsIds.includes(product._id)"
-          @add-to-cart="addToCart(product._id, 1)"
+          @add-to-cart="addToCart(product._id, product.title, 1)"
+        />
+      </template>
+    </FlexWrapper>
+    <FlexWrapper>
+      <template #loader>
+        <Loader v-if="isLoading" :animation-duration="2000" :size="65" color="red" class="absolute inset-2/4" />
+      </template>
+      <template #content>
+        <div class="col-span-full">
+          <h1>Пицца</h1>
+        </div>
+        <AppCard
+          v-for="product in pizza"
+          :key="product._id"
+          :product="product"
+          :price="product.price"
+          :title="product.title"
+          :description="product.description"
+          :image="product.imageUrl"
+          @add-to-cart="addToCart(product._id, product.title, 1)"
         />
       </template>
     </FlexWrapper>
@@ -29,6 +48,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 // import AppBanner from '../components/UI/AppBanner.vue';
+import AppSlider from '@/components/UI/AppSlider.vue';
 import AppCard from '@/components/UI/AppCard.vue';
 import FlexWrapper from '@/components/layout/FlexWrapper.vue';
 import Loader from '@/components/UI/Loader.vue';
@@ -40,6 +60,7 @@ export default {
     AppCard,
     FlexWrapper,
     Loader,
+    AppSlider,
   },
   data() {
     return {};
@@ -49,28 +70,31 @@ export default {
       products: 'products/products',
       isLoading: 'products/isLoading',
       cartItems: 'cart/cartItems',
+      categories: 'categories/categories',
     }),
-    cartItemsIds() {
-      return this.cartItems?.map(({ _id }) => _id);
+    pork() {
+      return this.categories[1]?.products;
     },
-    // productInCart(id) {
-    //   return this.cartItemsIds?.includes(id);
-    // },
+    pizza() {
+      return this.categories[9]?.products;
+    },
   },
   methods: {
     ...mapActions({
       fetchProducts: 'products/fetchProducts',
+      fetchCategories: 'categories/fetchCategories',
     }),
-    addToCart(id, quantity) {
+    addToCart(id, title, quantity) {
       this.$store.dispatch('cart/addProductToCart', {
         productId: id,
+        productName: title,
         quantity: 1,
       });
-      console.log(this.cartItemsIds);
     },
   },
   mounted() {
-    this.fetchProducts();
+    // this.fetchCategories();
+    // this.fetchProducts();
   },
 };
 </script>

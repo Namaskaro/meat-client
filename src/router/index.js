@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, createMemoryHistory } from 'vue-router';
 import Home from '@/views/Home.vue';
 import Cart from '@/views/Cart.vue';
 import Product from '@/views/Product.vue';
@@ -13,8 +13,22 @@ const routes = [
     meta: { transition: 'fade', layout: 'shop' },
   },
   {
+    path: '/register',
+    name: 'register',
+    props: true,
+    component: () => import(/* webpackChunkName: "Register" */ '../views/Register.vue'),
+    meta: { transition: 'fade', layout: 'shop' },
+  },
+  {
+    path: '/login',
+    name: 'userlogin',
+    props: true,
+    component: () => import(/* webpackChunkName: "Login" */ '../views/LoginUser.vue'),
+    meta: { transition: 'fade', layout: 'shop' },
+  },
+  {
     path: '/cart',
-    name: 'Cart',
+    name: 'cart',
     component: () => import(/* webpackChunkName: "Cart" */ '../views/Cart.vue'),
     meta: { transition: 'fade', layout: 'shop' },
   },
@@ -76,7 +90,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: process.isServer ? createMemoryHistory() : createWebHistory('/'),
   routes,
 });
 

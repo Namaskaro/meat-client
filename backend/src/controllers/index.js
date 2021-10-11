@@ -3,4 +3,5 @@ module.exports = {
   product: require('./product.controller'),
   user: require('./user.controller'),
   auth: require('./auth.controller'),
+  category: require('./category.controller'),
 };

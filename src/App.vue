@@ -16,9 +16,11 @@ export default {
     AuthLayout,
     AdminLayout,
   },
+
   computed: {
     ...mapGetters({
       theme: 'getTheme',
+      // categories: 'categories/categories',
     }),
     layout() {
       return (this.$route.meta.layout || 'shop') + '-layout';
@@ -29,6 +31,8 @@ export default {
       getCart: 'cart/getCart',
       getUser: 'cart/getUser',
       getUserAccessKey: 'cart/getUserAccessKey',
+      fetchCategories: 'categories/fetchCategories',
+      fetchProducts: 'products/fetchProducts',
     }),
     ...mapMutations({
       updateUserToken: 'cart/updateUserAccessKey',
@@ -36,18 +40,25 @@ export default {
   },
   watch: {
     theme(newTheme, oldTheme) {
-      newTheme === 'light' ? document.querySelector('html').classList.remove('dark') : document.querySelector('html').classList.add('dark');
+      if (typeof window !== 'undefined') {
+        newTheme === 'light' ? document.querySelector('html').classList.remove('dark') : document.querySelector('html').classList.add('dark');
+      }
     },
   },
   created() {
     this.$store.dispatch('initTheme');
-    const userAccessKey = localStorage.getItem('userToken');
-    if (userAccessKey) {
-      this.updateUserToken(userAccessKey);
-    } else {
-      this.getUser();
+    if (typeof window !== 'undefined') {
+      const userAccessKey = localStorage.getItem('userToken');
+      if (userAccessKey) {
+        this.updateUserToken(userAccessKey);
+      } else {
+        this.getUser();
+      }
     }
+
     this.getCart();
+    this.fetchCategories();
+    this.fetchProducts();
   },
 };
 </script>

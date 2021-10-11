@@ -1,13 +1,10 @@
 <template>
-  <div
-    v-if="notification.active"
-    class="flex flex-col p-6 bg-white dark:bg-black text-gray-700 dark:text-white absolute rounded-xl top-50% border-r-4 border-green-400"
-  >
+  <div v-if="notification.active" class="notification ">
     <slot name="message">{{ notification.message }}</slot>
     <slot name="close">
       <div class="flex justify-center mt-3">
         <button class="delete" @click="toggleNotification">
-          Delete
+          <IconX />
         </button>
       </div>
     </slot>
@@ -16,14 +13,22 @@
 </template>
 
 <script>
+import IconX from '@/components/icons/IconX.vue';
+
 export default {
   name: 'Notification',
+  components: {
+    IconX,
+  },
   props: ['notification', 'toggleNotification'],
 };
 </script>
 
 <style lang="postcss" scoped>
-.delete {
-  @apply px-1 py-1 bg-green-600 text-white text-base rounded-xl w-24;
+.notification {
+  @apply flex flex-col p-6 bg-white fixed rounded-xl left-2/4 translate-x-2/4 top-0 border-r-4 text-gray-700;
+}
+.notification:dark {
+  @apply bg-black text-white;
 }
 </style>

@@ -27,6 +27,10 @@ const schema = new Schema({
     type: String,
     default: '',
   },
+  category: {
+    type: ObjectId,
+    ref: 'Category',
+  },
 });
 
 module.exports = model('Product', schema);

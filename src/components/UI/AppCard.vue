@@ -1,6 +1,6 @@
 <template>
-  <div class="rounded-xl overflow-hidden shadow-lg hover:shadow-2xl bg-white">
-    <img class="w-full h-72 cover" :src="image" alt="River" />
+  <div class="rounded-lg overflow-hidden shadow-lg hover:shadow-2xl bg-white">
+    <img class="w-full h-72 cover" :src="image" alt="River" loading="lazy" />
     <div class="px-6 py-4">
       <div class="font-bold text-xl mb-2 h-16">{{ title }}</div>
       <!-- <p class="text-gray-700 text-base">
@@ -54,6 +54,9 @@ export default {
       type: String,
       default: () => '',
       required: true,
+    },
+    weight: {
+      type: Number,
     },
     product: {
       type: Object,

@@ -29,13 +29,23 @@ export default {
       state.productError = error;
       state.isLoading = false;
     },
+    createProductSuccess(state, product) {
+      state.product = product;
+    },
   },
   actions: {
+    async createProduct({ commit }, payload) {
+      try {
+        const product = await axios.post('http://localhost:4000/api/v1/products/', payload);
+        commit('createProductSuccess', product);
+        return product;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async fetchProduct({ commit }, id) {
       try {
-        const product = await axios
-          .get(`http://localhost:4000/api/v1/products/${id}`)
-          .then(response => response.data.data);
+        const product = await axios.get(`http://localhost:4000/api/v1/products/${id}`).then(response => response.data.data);
         commit('setProduct', product);
       } catch (error) {
         commit('setProductError');

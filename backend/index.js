@@ -6,6 +6,7 @@ const http = require('http');
 const cors = require('cors');
 const { join } = require('path');
 const { routes } = require('./src/routes');
+const compression = require('compression');
 
 // настроим подключение к бд
 const mongoHost = process.env.MONGO_HOST;
@@ -21,6 +22,7 @@ mongoose.connect(`mongodb://${mongoHost}:${mongoPort}/${mongoDbname}`, {
 // инициализируем приложение
 const app = express();
 app.use(cors());
+app.use(compression());
 
 app.use(bodyParser.json());
 

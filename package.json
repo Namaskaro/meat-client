@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode development",
-    "build": "vue-cli-service build",
+    "build": "npm run build:client && npm run build:server",
     "build:client": "vue-cli-service build",
     "build:server": "vue-cli-service build --no-clean --server",
+    "devbuild:client": "vue-cli-service build --unhandled-rejections=strict --mode development",
+    "devbuild:server": "vue-cli-service build --no-clean --unhandled-rejections=strict --server --mode development",
+    "devbuild": "npm run devbuild:client && npm run devbuild:server",
     "start": "vue-cli-service serve --mode production",
     "render": "vue-cli-service build:prerender",
     "lint": "vue-cli-service lint"
@@ -14,6 +17,8 @@
   "dependencies": {
     "@headlessui/vue": "^1.4.1",
     "@heroicons/vue": "^1.0.4",
+    "@vue/server-renderer": "^3.2.19",
+    "@vueform/multiselect": "^2.2.0",
     "@vuelidate/core": "^2.0.0-alpha.25",
     "@vuelidate/validators": "^2.0.0-alpha.21",
     "axios": "^0.21.1",
@@ -21,9 +26,8 @@
     "express": "^4.17.1",
     "maska": "^1.4.5",
     "prerender-spa-plugin": "^3.4.0",
-    "vue": "^3.0.0",
+    "vue": "^3.2.19",
     "vue-router": "^4.0.0-0",
-    "vue-server-renderer": "^2.6.14",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
@@ -44,7 +48,8 @@
     "postcss": "^7.0.36",
     "rimraf": "^2.7.1",
     "sass-loader": "^8.0.2",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.7"
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.7",
+    "webpack-node-externals": "^3.0.0"
   },
   "eslintConfig": {
     "root": true,
@@ -78,7 +83,8 @@
       "vue/no-unused-vars": "off",
       "no-param-reassign": "off",
       "consistent-return": "off",
-      "prefer-template": "off"
+      "prefer-template": "off",
+      "vue/no-unused-components": "off"
     }
   },
   "browserslist": [

@@ -18,9 +18,7 @@
         <!-- path -->
         <div class="toggle-path bg-gray-200 w-16 h-7 rounded-full shadow-inner relative"></div>
         <!-- crcle -->
-        <div
-          class="toggle-circle absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 left-0"
-        ></div>
+        <div class="toggle-circle absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 left-0"></div>
       </div>
     </label>
     <div class="iconWrapper">
@@ -43,6 +41,7 @@ export default {
   data() {
     return {
       isDark: false,
+      toggle: false,
     };
   },
   computed: {
@@ -53,10 +52,14 @@ export default {
       this.$store.dispatch('toggleTheme');
     },
     openStorage() {
-      return JSON.parse(localStorage.getItem('toggle'));
+      if (typeof window !== 'undefined') {
+        return JSON.parse(localStorage.getItem('toggle'));
+      }
     },
     saveStorage(toggle) {
-      localStorage.setItem('toggle', JSON.stringify(toggle));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('toggle', JSON.stringify(toggle));
+      }
     },
     updateToggle(toggle, value) {
       this.toggle = value;

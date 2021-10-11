@@ -3,6 +3,7 @@ import products from './products';
 import theme from './theme';
 import cart from './cart';
 import admin from './admin';
+import categories from './categories';
 
 export default createStore({
   state: {
@@ -26,6 +27,7 @@ export default createStore({
     theme,
     cart,
     admin,
+    categories,
   },
   strict: process.env.NODE_ENV !== 'production',
 });

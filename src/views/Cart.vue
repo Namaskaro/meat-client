@@ -14,17 +14,19 @@
                     :title="item.title"
                     :image="item.image"
                     :price="item.price"
+                    :total="item.total"
                     :productId="item.productId"
-                    :quantity="item.quantity"
+                    :amount="item.quantity"
                     v-model="item.quantity"
                     :canDecrease="item.quantity > 1"
                     @removeItem="deleteCartItem(item.productId)"
                     @increase-qty="plusQty(item.productId, 1)"
                     @decrease-qty="minusQty(item.productId, 1)"
+                    @set-cnt="setQty(item.productId, quantity)"
                   />
 
                   <div class="flex flex-row justify-end">
-                    <span>{{ total }}</span>
+                    <span>{{ cartTotal }}</span>
                   </div>
                   <div class="flex justify-between flex-wrap mt-12">
                     <AppButton title="Продолжить покупки" text="white" variant="green" rounded="2xl" size="sm">
@@ -84,7 +86,7 @@ export default {
       items: 'cart/cartItems',
       cartTotal: 'cart/cartTotal',
     }),
-    total() {
+    cartTotal() {
       return this.cartTotal;
     },
     isEmpty() {
@@ -96,11 +98,12 @@ export default {
       getCart: 'cart/getCart',
       addItem: 'cart/addProductToCart',
       removeItem: 'cart/decrementQuantity',
+      updateQuantity: 'cart/updateQuantity',
     }),
     deleteCartItem(productId) {
       this.$store.dispatch('cart/deleteItemFromCart', productId);
     },
-    plusQty(id, quantity) {
+    plusQty(id, quantity, weightPerPlus) {
       this.addItem({
         productId: id,
         quantity: 1,
@@ -111,6 +114,18 @@ export default {
         productId: id,
         quantity: 1,
       });
+    },
+    setQty(id, quantity) {
+      this.updateQuantity({
+        productId: id,
+        quantity: this.quantity,
+      });
+    },
+    plusWeight() {
+      this.weight += 0.2;
+    },
+    minusWeight() {
+      this.weight -= 0.2;
     },
   },
   mounted() {

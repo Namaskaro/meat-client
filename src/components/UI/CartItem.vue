@@ -31,6 +31,9 @@
       <div class="pr-8 ">
         <span class="text-sm font-medium text-gray-600 dark:text-white">{{ price }}</span>
       </div>
+      <div class="pr-8 ">
+        <span class="text-sm font-medium text-gray-600 dark:text-white">{{ total }}</span>
+      </div>
       <button @click="$emit('remove-item')"><IconX /></button>
     </div>
   </div>
@@ -62,13 +65,27 @@ export default {
     image: {
       type: String,
     },
-    quantity: {
+    amount: {
       type: Number,
       default: 1,
     },
+    total: {
+      type: Number,
+    },
   },
-  emits: ['update:modelValue', 'increase-qty', 'decrease-qty', 'remove-item'],
+  emits: ['update:modelValue', 'increase-qty', 'decrease-qty', 'remove-item', 'set-cnt'],
 };
 </script>
 
-<style></style>
+<style lang="postcss" scoped>
+input[type='number'] {
+  -moz-appearance: textfield;
+  -webkit-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  display: none;
+}
+</style>

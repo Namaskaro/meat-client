@@ -11,7 +11,7 @@ const schema = new Schema({
     type: String,
     default: '',
   },
-  description: {
+  slug: {
     type: String,
     default: '',
   },

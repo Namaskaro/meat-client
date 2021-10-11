@@ -111,14 +111,14 @@ exports.emptyCart = async (req, res) => {
   }
 };
 
-module.exports.minusQuantity = async (req, res) => {
-  const { productId } = req.body;
+module.exports.updateQuantity = async (req, res) => {
   const { userId } = req.body;
+  const { productId } = req.body;
   const quantity = Number.parseInt(req.body.quantity);
   try {
-    const cart = await Cart.findOne({ userId }).populate({
-      path: 'items.productId',
-    });
+    let cart = await Cart.findOne({ userId });
+    // let item = await Item.findOne({ _id: productId });
+
     const productDetails = await productRepository.productById(productId);
     if (!productDetails) {
       return res.status(500).json({
@@ -126,23 +126,50 @@ module.exports.minusQuantity = async (req, res) => {
         msg: 'Invalid request',
       });
     }
-    // --If Cart Exists ----
     if (cart) {
-      // ---- check if index exists ----
+      // if cart exists for the user
       let itemIndex = cart.items.findIndex(p => p.productId == productId);
-      // this removes an item from the the cart if the quantity is set to zero,We can use this method to remove an item from the list
-      if (itemIndex !== -1 && quantity <= 0) {
-        cart.items.splice(itemIndex, 1);
-        if (cart.items.length == 0) {
-          cart.subTotal = 0;
-        } else {
-          cart.subTotal = cart.items
-            .map(item => item.total)
-            .reduce((acc, next) => acc + next);
-        }
+
+      // Check if product exists or not
+      if (itemIndex > -1) {
+        cart.items[itemIndex].quantity = quantity;
+        cart.items[itemIndex].total =
+          cart.items[itemIndex].quantity * productDetails.price;
+        cart.items[itemIndex].price = productDetails.price;
+        cart.subTotal = cart.items
+          .map(item => item.total)
+          .reduce((acc, next) => acc + next);
       }
-      // ----------check if product exist,just add the previous quantity with the new quantity and update the total price-------
-      else if (itemIndex !== -1) {
+      cart = await cart.save();
+      return res.status(201).send(cart);
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Something went wrong');
+  }
+};
+
+module.exports.minusQuantity = async (req, res) => {
+  const { userId } = req.body;
+  const { productId } = req.body;
+  const quantity = Number.parseInt(req.body.quantity);
+  try {
+    let cart = await Cart.findOne({ userId });
+    // let item = await Item.findOne({ _id: productId });
+
+    const productDetails = await productRepository.productById(productId);
+    if (!productDetails) {
+      return res.status(500).json({
+        type: 'Not Found',
+        msg: 'Invalid request',
+      });
+    }
+    if (cart) {
+      // if cart exists for the user
+      let itemIndex = cart.items.findIndex(p => p.productId == productId);
+
+      // Check if product exists or not
+      if (itemIndex > -1) {
         cart.items[itemIndex].quantity =
           cart.items[itemIndex].quantity - quantity;
         cart.items[itemIndex].total =
@@ -152,19 +179,8 @@ module.exports.minusQuantity = async (req, res) => {
           .map(item => item.total)
           .reduce((acc, next) => acc + next);
       }
-      // ----if quantity of price is 0 throw the error -------
-      else {
-        return res.status(400).json({
-          type: 'Invalid',
-          msg: 'Invalid request',
-        });
-      }
-      const data = await cart.save();
-      res.status(200).json({
-        type: 'success',
-        mgs: 'Process Successful',
-        data,
-      });
+      cart = await cart.save();
+      return res.status(200).send(cart);
     }
   } catch (err) {
     console.log(err);
@@ -186,7 +202,7 @@ module.exports.deleteItem = async (req, res) => {
       cart.items.splice(itemIndex, 1);
     }
     cart = await cart.save();
-    return res.status(201).send(cart);
+    return res.status(200).send(cart);
   } catch (err) {
     console.log(err);
     res.status(500).send('Something went wrong');

@@ -1,6 +1,6 @@
 <template>
   <select
-    class="w-full px-5 py-2 text-gray-700 bg-white rounded-lg border border-gray-300"
+    class=" px-5 py-2 text-gray-700 bg-white rounded-lg border border-gray-300"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
   >

@@ -1,8 +1,6 @@
 <template>
   <AppHeader />
-  <transition name="fade" mode="out-in">
-    <router-view />
-  </transition>
+  <router-view />
   <transition name="fade" mode="out-in">
     <Notification :notification="notification" :toggleNotification="toggleNotification"> </Notification>
   </transition>
@@ -35,6 +33,6 @@ export default {
 }
 .fade-enter-from,
 .fade-leave-to {
-  opacity: 0;
+  opacity: 1;
 }
 </style>

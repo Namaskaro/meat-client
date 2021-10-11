@@ -19,13 +19,14 @@ const schema = new Schema({
     type: String,
     default: '',
   },
-  email: {
-    type: String,
-    default: '',
-  },
+
   amount: {
     type: Number,
     default: 0,
+  },
+  comment: {
+    type: String,
+    default: ''
   },
   clientSecret: {
     type: String,
